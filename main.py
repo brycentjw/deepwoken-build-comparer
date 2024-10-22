@@ -2,13 +2,24 @@ import requests
 import re
 import win32clipboard
 from ItsPrompt.prompt import Prompt
+import os
 
-### CONFIG ###
-# set build id here
+def create_file_if_not_exists(file_name):
+    # Check if the file already exists
+    if not os.path.exists(file_name):
+        # If the file does not exist, create it
+        with open(file_name, 'w') as file:
+            file.write("")  # You can also add initial content here if needed
+        print(f"File '{file_name}' created.")
+    else:
+        print(f"File '{file_name}' already exists.")
+
+create_file_if_not_exists("buildId.txt")
+create_file_if_not_exists("characterData.txt")
+
 r = open("buildId.txt", "r")
 buildId = r.read()
 r.close()
-# edit talentsToCompareTo.txt
 
 ### CODE ###
 # ignore talents that contain these substrings
