@@ -35,7 +35,10 @@ There are known issues with this feature, please refer to the Known Issues categ
 
 
 ## **Q:** I managed to import my character data and set my builder link/ID, and selected 'Print build and character data comparisons'. What do these things mean?
-
+"Talents that the character has, and is also in the build": These are talents that are in the deepwoken builder link/ID and are also found in your currently imported character.
+"Talents that are in the build, but the character doesn't have": These are talents that are in the deepwoken builder link/ID, but are not found in your currently imported character.
+"Talents that the character has, but aren't in the build": These are extra talents that are not in the deepwoken builder link/ID, but are found in your currently imported character.
+"Talents that are in the build and can be obtained, but the character doesn't have": These are missing talents that are in the deepwoken builder link/ID, and are currently obtainable for your currently imported character.
 
 ## **Q:** You should add ${feature}.
 
