@@ -5,3 +5,5 @@ dist
 myenv
 buildId.txt
 characterData.txt
+test.py
+equipmentTalents.txt
