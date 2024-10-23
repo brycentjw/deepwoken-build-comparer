@@ -245,7 +245,7 @@ def compare_build_and_character_data():
         classified = {'Common': [], 'Rare': [], 'Advanced': []}
         for talent in talents:
             rarity = get_talent_rarity(talent, all_talents_data)
-            if rarity not in ['NotFound', 'Outfit', 'Murmur', 'Origin', 'Quest', 'Oath'] and not should_ignore_talent(talent, characterOrBuild):
+            if rarity not in ['NotFound', 'Quest', 'Outfit', 'Oath', 'Unique', 'Origin', 'Equipment', 'Murmur'] and not should_ignore_talent(talent, characterOrBuild):
                 classified[rarity].append(talent)
         return classified
 
