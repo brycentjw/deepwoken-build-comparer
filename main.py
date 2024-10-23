@@ -2,7 +2,42 @@ import requests
 import re
 import win32clipboard
 from ItsPrompt.prompt import Prompt
+from packaging import version
 import os
+
+CURRENT_VERSION = "1.2.2" # Update this version when you release new versions
+GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
+
+# Function to fetch the latest release version from GitHub
+def get_latest_version_from_github(repo):
+    url = f"https://api.github.com/repos/{repo}/releases/latest"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        latest_release = response.json()
+        return latest_release["tag_name"].lstrip('v')  # Remove 'v' prefix from the version tag
+    except requests.RequestException as e:
+        print(f"Error fetching latest version: {e}")
+        return None
+
+# Function to check for updates and notify the user
+def check_for_updates():
+    latest_version = get_latest_version_from_github(GITHUB_REPO)
+    if latest_version:
+        # Use packaging.version to compare semantic versions properly
+        local_ver = version.parse(CURRENT_VERSION)
+        latest_ver = version.parse(latest_version)
+
+        if local_ver < latest_ver:
+            print(f"Warning: You are using an older version ({CURRENT_VERSION}). The latest version is {latest_version}.")
+            print("Please update the script to the latest version on https://github.com/brycentjw/deepwoken-build-comparer/releases.")
+        elif local_ver > latest_ver:
+            print(f"You are using a newer version ({CURRENT_VERSION}) than the latest release ({latest_version}).")
+            print("This might be a development or pre-release version.")
+        else:
+            print(f"You are using the latest version ({CURRENT_VERSION}).")
+    else:
+        print("Could not check for updates.")
 
 # Utility to create a file if it does not exist
 def create_file_if_not_exists(file_name):
@@ -306,6 +341,7 @@ if __name__ == "__main__":
 
         print("Created by brycentjw (https://github.com/brycentjw/deepwoken-build-comparer)")
         print("Uses cyfiee's deepwoken builder (https://deepwoken.co/) and its API (https://api.deepwoken.co/)")
+        check_for_updates()
         
         selected_option = Prompt.select(
             question='Select an option',
