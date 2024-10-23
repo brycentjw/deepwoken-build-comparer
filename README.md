@@ -59,3 +59,6 @@ As of 23/10/2024, there is no option to differentiate where certain talents are 
 As of 23/10/2024, there is a weird interaction with equipment talents being 'duplicated' when exporting character data. This should not affect this program, but nonetheless an issue with exporting data.
 
 As of 23/10/2024, there are talents that will be noted as "can be obtained", however cannot be obtained due to some other requirement (i.e: Ardour Scream needing Mumur: Ardour, Warding Radiance needing Fire Forge mantra). This is something I may fix in the future, but for now please keep this in mind when using this program to check for obtainable talents.
+
+# Remarks
+If you like this program that I wrote, please share this amongst your friends or people you know! I spent a lot of time on this, so I would greatly appreciate it if it was used by more people. Whether or not you do, thank you for using my program.
