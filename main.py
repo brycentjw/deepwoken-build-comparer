@@ -410,7 +410,7 @@ if __name__ == "__main__":
                     file.write(buildId)
                 print("Build ID successfully updated.\n")
             else:
-                print("There was an error with the build ID.\nIt should look like 'https://deepwoken.co/builder?id=IxoCRuz6', or you can also input the id itself like 'IxoCRuz6'.\n")
+                print(f"There was an error with the build ID (clipboard input: '{clipboard_data}').\nIt should look like 'https://deepwoken.co/builder?id=IxoCRuz6', or you can also input the id itself like 'IxoCRuz6'.\n")
         elif selected_option.startswith("Modify equipment talents ignore list"):
             modify_equipment_talents()
         elif selected_option == "Refresh Deepwoken builder talent list":
