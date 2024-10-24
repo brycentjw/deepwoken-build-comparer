@@ -123,7 +123,7 @@ def get_build_talents(build_id: str):
         if data['status'] == "failed":
             return False
 
-        talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in data['content']]
+        talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in data['content']['talents']]
         return talents
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
@@ -342,6 +342,8 @@ def compare_build_and_character_data():
 
     system_clear()
     # Print results
+    # print(build_talents_classified)
+    # print(character_talents_classified)
     # print("obtainable:", obtainable_talents)
     # print("missing from character:",missing_talents)
     # print("are in both:",talents_in_both)
