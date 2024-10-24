@@ -24,7 +24,7 @@ def get_clipboard_data():
     else:
         return pyperclip.paste()
 
-# Utility to clear the console window without relying on platform-specific libraries
+# Utility to clear the console window without relying on Windows-exclusive commands
 def system_clear():
     if is_windows:
         os.system("cls")
