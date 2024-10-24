@@ -6,7 +6,7 @@ import os
 from platform import system
 
 # Check for the Windows operating system for clipboard operations
-is_windows = True if platform.system() == "Windows" else False
+is_windows = True if system() == "Windows" else False
 
 if is_windows:
     import win32clipboard
