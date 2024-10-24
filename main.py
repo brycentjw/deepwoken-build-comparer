@@ -1,9 +1,35 @@
 import requests
 import re
-import win32clipboard
 from ItsPrompt.prompt import Prompt
 from packaging import version
 import os
+import platform
+
+# Check for the Windows operating system for clipboard operations
+is_windows = True if platform.system() == "Windows" else False
+
+if is_windows:
+    import win32clipboard
+else:
+    # Alternate clipboard utility for Linux/Mac (untested on Mac systems)
+    import pyperclip
+
+# Utility to get clipboard data across multiple operating systems
+def get_clipboard_data():
+    if is_windows:
+        win32clipboard.OpenClipboard()
+        clipboardData = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        return clipboardData
+    else:
+        return pyperclip.paste()
+
+# Utility to clear the console window without relying on platform-specific libraries
+def system_clear():
+    if is_windows:
+        os.system("cls")
+    else:
+        os.system("clear")
 
 CURRENT_VERSION = "1.2.2" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
@@ -97,7 +123,7 @@ def get_build_talents(build_id: str):
         if data['status'] == "failed":
             return False
 
-        talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in data['content']['talents']]
+        talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in data['content']]
         return talents
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
@@ -198,9 +224,7 @@ def parse_character_data():
 
 # Import character data from clipboard
 def import_character_data_from_clipboard():
-    win32clipboard.OpenClipboard()
-    clipboard_data = win32clipboard.GetClipboardData()
-    win32clipboard.CloseClipboard()
+    clipboard_data = get_clipboard_data()
 
     if '== MANTRAS ==' in clipboard_data:
         with open("characterData.txt", "w") as file:
@@ -218,7 +242,7 @@ def find_talent_case_insensitive(talent_name: str, all_talents_data: dict):
 
 # Function to modify equipment talents ignore list
 def modify_equipment_talents():
-    os.system('cls')
+    system_clear()
     print("Current Equipment Talents to Ignore:", equipmentTalents)
     
     option = Prompt.select(
@@ -226,7 +250,7 @@ def modify_equipment_talents():
         options=("Add a talent to ignore", "Remove a talent from ignore list", "Clear the entire ignore list", "Back to main menu"),
         default="Add a talent to ignore"
     )
-    os.system('cls')
+    system_clear()
     
     if option == "Add a talent to ignore":
         new_talent = Prompt.input("Enter the talent name to ignore:").strip()  # Keep original input
@@ -316,7 +340,7 @@ def compare_build_and_character_data():
             print(f"{rarity} ({len(talents_dict[rarity])}):")
             print(talents_dict[rarity])
 
-    os.system('cls')
+    system_clear()
     # Print results
     # print("obtainable:", obtainable_talents)
     # print("missing from character:",missing_talents)
@@ -329,7 +353,7 @@ def compare_build_and_character_data():
     print()
 
 
-os.system('cls')
+system_clear()
 # Main loop for the CLI interaction
 if __name__ == "__main__":
     while True:
@@ -355,7 +379,7 @@ if __name__ == "__main__":
             ),
             default="Print build and character data comparisons"
         )
-        os.system('cls')
+        system_clear()
 
         if selected_option == "Print build and character data comparisons":
             verified = True
@@ -378,11 +402,9 @@ if __name__ == "__main__":
                 print("Character data was not imported correctly, please import the character data again.")
                 print("If you do not know how to, please refer to the README on the github (https://github.com/brycentjw/deepwoken-build-comparer) and look for the 'How do I import character data? | What's character data?' question in the FAQ.\n")
         elif selected_option.startswith("Import Deepwoken builder ID"):
-            win32clipboard.OpenClipboard()
-            clipboard_data = win32clipboard.GetClipboardData()
-            win32clipboard.CloseClipboard()
+            clipboard_data = get_clipboard_data()
             new_build_id = clipboard_data.strip().replace("https://deepwoken.co/builder?id=", "")
-            if new_build_id and get_build_talents(new_build_id) != False:
+            if new_build_id and get_build_talents(new_build_id):
                 buildId = new_build_id
                 with open("buildId.txt", "w") as file:
                     file.write(buildId)
@@ -393,7 +415,7 @@ if __name__ == "__main__":
             modify_equipment_talents()
         elif selected_option == "Refresh Deepwoken builder talent list":
             all_talents_data = get_all_talents_from_api()
-            os.system('cls')
+            system_clear
             print('All talents have been refreshed.\n')
         elif selected_option == "Exit":
             break
