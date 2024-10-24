@@ -415,7 +415,7 @@ if __name__ == "__main__":
             modify_equipment_talents()
         elif selected_option == "Refresh Deepwoken builder talent list":
             all_talents_data = get_all_talents_from_api()
-            system_clear
+            system_clear()
             print('All talents have been refreshed.\n')
         elif selected_option == "Exit":
             break
