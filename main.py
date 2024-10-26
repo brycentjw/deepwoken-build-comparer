@@ -135,14 +135,28 @@ def can_obtain_talent(character: dict, talent: str, all_talents_data: dict):
     
     if not talent_data:
         return False
+    
+    talent_is_exclusive_with = talent_data['exclusiveWith']
 
     character_attributes = character['attributes']
     talent_reqs = {**talent_data['reqs']['base'], **talent_data['reqs']['weapon'], **talent_data['reqs']['attunement']}
     talent_power = talent_data['reqs']['power']
+    talent_is_from: str = talent_data['reqs']['from']
     
     # Check for attribute and power level requirements
     if character['power'] < int(talent_power):
         return False
+
+    for talent_exclusive_with in talent_is_exclusive_with:
+        if re.sub(r"\[.*?\]", "", talent_exclusive_with).strip() in character['talents']:
+            return False
+
+    if talent_is_from != "":
+        for talent_from in talent_is_from.split(", "):
+            stripped_talent = re.sub(r"\[.*?\]", "", talent_from).strip()
+            if not (stripped_talent in character['talents']) and stripped_talent.lower() in all_talents_data:
+                return False
+    
     if talent == "Neuroplasticity":
         return all(character_attributes[attr] >= 35 for attr in ['Intelligence', 'Willpower', 'Charisma'])
     return all(character_attributes[attr] >= req for attr, req in talent_reqs.items())
