@@ -149,7 +149,6 @@ def can_obtain_talent(character: dict, talent: str, all_talents_data: dict):
         return False
     
     talent_is_exclusive_with = talent_data['exclusiveWith']
-    print(talent_is_exclusive_with)
 
     character_attributes = character['attributes']
     talent_reqs = {**talent_data['reqs']['base'], **talent_data['reqs']['weapon'], **talent_data['reqs']['attunement']}
