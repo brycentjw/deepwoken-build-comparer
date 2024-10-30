@@ -100,7 +100,11 @@ all_talents_data = get_all_talents_from_api()
 
 # Check if a talent should be ignored based on its name
 def should_ignore_talent(talent_name: str, characterOrBuild: str):
-    return any(ignored in talent_name for ignored in talentsToIgnore) or (characterOrBuild == "character" and talent_name in equipmentTalents)
+    # Convert talent_name to lowercase for case-insensitive comparison
+    talent_name_lower = talent_name.lower()
+    return any(ignored.lower() in talent_name_lower for ignored in talentsToIgnore) or \
+           (characterOrBuild == "character" and talent_name_lower in (talent.lower() for talent in equipmentTalents))
+
 
 # Retrieve talent data by name
 def get_talent_data(talent_name: str, all_talents_data: dict):
@@ -112,8 +116,7 @@ def get_talent_rarity(talent_name: str, all_talents_data: dict):
     talent_data = get_talent_data(talent_name, all_talents_data)
     return "NotFound" if not talent_data else talent_data['rarity']
 
-# Get talents from a build using its ID
-def get_build_talents(build_id: str):
+def get_build(build_id: str):
     url = f"https://api.deepwoken.co/build?id={build_id}"
     try:
         response = requests.get(url, timeout=5)
@@ -123,11 +126,21 @@ def get_build_talents(build_id: str):
         if data['status'] == "failed":
             return False
 
-        talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in data['content']['talents']]
-        return talents
+        content = data['content']
+        return content
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return False
+
+# Get talents from a build using its ID
+def get_build_talents(build_arg: str | list):
+    if type(build_arg) == "str":
+        build_data = get_build(build_arg)
+    else:
+        build_data = build_arg
+    talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in build_data['talents']]
+    return talents
+    
 
 # Check if a talent can be obtained by a character
 def can_obtain_talent(character: dict, talent: str, all_talents_data: dict):
@@ -153,8 +166,9 @@ def can_obtain_talent(character: dict, talent: str, all_talents_data: dict):
 
     if talent_is_from != "":
         for talent_from in talent_is_from.split(", "):
-            stripped_talent = re.sub(r"\[.*?\]", "", talent_from).strip()
-            if not (stripped_talent in character['talents']) and stripped_talent.lower() in all_talents_data:
+            stripped_talent = re.sub(r"\[.*?\]", "", talent_from).strip().lower()
+            print(should_ignore_talent("Galebreather", "build"))
+            if not (stripped_talent in character['talents']) and stripped_talent in all_talents_data and not should_ignore_talent(stripped_talent, "build"):
                 return False
     
     if talent == "Neuroplasticity":
@@ -309,7 +323,8 @@ def compare_build_and_character_data():
     if not character_data:
         return False
 
-    build_talents = get_build_talents(buildId)
+    build_data = get_build(buildId)
+    build_talents = get_build_talents(build_data)
     if not build_talents:
         return False
 
@@ -330,6 +345,7 @@ def compare_build_and_character_data():
     missing_talents = {rarity: [] for rarity in ['Common', 'Rare', 'Advanced']}
     talents_in_both = {rarity: [] for rarity in ['Common', 'Rare', 'Advanced']}
     obtainable_talents = {rarity: [] for rarity in ['Common', 'Rare', 'Advanced']}
+    pre_shrine_talents = {rarity: [] for rarity in ['Common', 'Rare', 'Advanced']}
 
     for rarity in build_talents_classified:
         for talent in build_talents_classified[rarity]:
