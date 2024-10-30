@@ -31,7 +31,7 @@ def system_clear():
     else:
         os.system("clear")
 
-CURRENT_VERSION = "1.2.5" # Update this version when you release new versions
+CURRENT_VERSION = "1.2.6" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
 
 # Function to fetch the latest release version from GitHub
