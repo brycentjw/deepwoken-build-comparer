@@ -31,7 +31,7 @@ def system_clear():
     else:
         os.system("clear")
 
-CURRENT_VERSION = "1.3.0" # Update this version when you release new versions
+CURRENT_VERSION = "1.3.1" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
 
 # Function to fetch the latest release version from GitHub
@@ -133,10 +133,11 @@ def get_build(build_id: str):
 
 # Get talents from a build using its ID
 def get_build_talents(build_arg: str | list):
-    if type(build_arg) == "str":
+    if type(build_arg) == str:
         build_data = get_build(build_arg)
     else:
         build_data = build_arg
+    print(build_data)
     talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in build_data['talents']]
     return talents
 
