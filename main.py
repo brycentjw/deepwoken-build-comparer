@@ -137,7 +137,6 @@ def get_build_talents(build_arg: str | list):
         build_data = get_build(build_arg)
     else:
         build_data = build_arg
-    print(build_data)
     talents = [re.sub(r"\[.*?\]", "", talent).strip() for talent in build_data['talents']]
     return talents
 
