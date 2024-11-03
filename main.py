@@ -31,7 +31,7 @@ def system_clear():
     else:
         os.system("clear")
 
-CURRENT_VERSION = "1.2.7" # Update this version when you release new versions
+CURRENT_VERSION = "1.3.0" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
 
 # Function to fetch the latest release version from GitHub
@@ -93,7 +93,7 @@ talentsToIgnore = [
 # Retrieve all talents from the Deepwoken Builder API
 def get_all_talents_from_api():
     print("Fetching list of all talents from Deepwoken Builder API...")
-    return requests.get("https://api.deepwoken.co/get?type=talent&name=all").json()['content']
+    return requests.get("https://api.deepwoken.co/get?type=talent&name=all").json()
 
 # Initialize all_talents_data
 all_talents_data = get_all_talents_from_api()
@@ -123,11 +123,10 @@ def get_build(build_id: str):
         response.raise_for_status()
         data = response.json()
         
-        if data['status'] == "failed":
+        if 'error' in data:
             return False
 
-        content = data['content']
-        return content
+        return data
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return False
@@ -384,6 +383,7 @@ def compare_build_and_character_data():
     print_talents("\n\nTalents that are in the build, but the character doesn't have:", missing_talents)
     print_talents("\n\nTalents that the character has, but aren't in the build:", extra_talents)
     print_talents("\n\nTalents that are in the build and can be obtained, but the character doesn't have:", obtainable_talents)
+    # print_talents("\n\nPre shrine talents that are in the build and can be obtained, but the character doesn't have:", pre_shrine_talents)
     print()
 
 
