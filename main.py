@@ -31,7 +31,7 @@ def system_clear():
     else:
         os.system("clear")
 
-CURRENT_VERSION = "1.3.1" # Update this version when you release new versions
+CURRENT_VERSION = "1.3.2" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
 
 # Function to fetch the latest release version from GitHub
@@ -204,16 +204,18 @@ def parse_character_data():
         "STR": 'Strength', "FTD": 'Fortitude', "AGL": 'Agility', "INT": 'Intelligence', 
         "WLL": 'Willpower', "CHA": 'Charisma', "HVY": 'Heavy Wep.', "MED": 'Medium Wep.',
         "LHT": 'Light Wep.', "FIR": 'Flamecharm', "ICE": 'Frostdraw', "LTN": 'Thundercall',
-        "WND": 'Galebreathe', "SDW": 'Shadowcast', "MTL": 'Ironsing'
+        "WND": 'Galebreathe', "SDW": 'Shadowcast', "MTL": 'Ironsing', 'BLD': 'Bloodrend'
     }
     attributes = {
         'Strength': 0, 'Fortitude': 0, 'Agility': 0, 'Intelligence': 0, 'Willpower': 0, 'Charisma': 0,
         'Heavy Wep.': 0, 'Medium Wep.': 0, 'Light Wep.': 0,
-        'Flamecharm': 0, 'Frostdraw': 0, 'Thundercall': 0, 'Galebreathe': 0, 'Shadowcast': 0, 'Ironsing': 0
+        'Flamecharm': 0, 'Frostdraw': 0, 'Thundercall': 0, 'Galebreathe': 0, 'Shadowcast': 0, 'Ironsing': 0, 'Bloodrend': 0
     }
     
     # Function to process attribute lines and update the dictionary
     def process_attributes(attribute_line):
+        if attribute_line == '':
+            return
         attr_pairs = attribute_line.split('; ')
         for attr in attr_pairs:
             key, value = attr.split()
