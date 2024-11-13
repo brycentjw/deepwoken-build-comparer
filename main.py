@@ -31,7 +31,7 @@ def system_clear():
     else:
         os.system("clear")
 
-CURRENT_VERSION = "1.3.2" # Update this version when you release new versions
+CURRENT_VERSION = "1.3.3" # Update this version when you release new versions
 GITHUB_REPO = "brycentjw/deepwoken-build-comparer"
 
 # Function to fetch the latest release version from GitHub
@@ -194,10 +194,14 @@ def parse_character_data():
     
     # Parse level, race, origin, oath from the second line
     character_info = lines[2].split()
+    if len(character_info) <= 4:
+        character_info.insert(4, "Pathfinder")
     character_dict['power'] = int(character_info[1])
-    character_dict['race'] = character_info[2]
-    character_dict['origin'] = character_info[3]
-    character_dict['oath'] = character_info[4]
+    character_dict['race'] = character_info[2].replace(",", "")
+    character_dict['origin'] = character_info[3].replace(",", "")
+    character_dict['oath'] = character_info[4].replace(",", "")
+
+    print(character_dict)
     
     # Initialize Attributes
     attributes_map = {
