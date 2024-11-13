@@ -200,8 +200,6 @@ def parse_character_data():
     character_dict['race'] = character_info[2].replace(",", "")
     character_dict['origin'] = character_info[3].replace(",", "")
     character_dict['oath'] = character_info[4].replace(",", "")
-
-    print(character_dict)
     
     # Initialize Attributes
     attributes_map = {
